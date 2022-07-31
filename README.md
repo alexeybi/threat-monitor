@@ -13,7 +13,7 @@ The requests are checked with [Google web-risk api](https://cloud.google.com/web
 
 ### Requirements
 
-* [tshark](https://tshark.dev/) has to be locally installed and given permissions to run without requiring password (e.g. by adding a rule it to sudoers): 
+* [tshark](https://tshark.dev/) has to be locally installed and given permissions to run without requiring password (e.g. by adding a rule to sudoers): 
 ```
 # /etc/sudoers.d/tshark-no-pass
 %admin ALL=(ALL) NOPASSWD: <path-to-tshark-bin>

@@ -6,13 +6,11 @@ import cats.implicits.*
 import cats.syntax.group.catsSyntaxSemigroup
 import fs2.{text, Pipe, Stream}
 import model.{Packet, Packets}
-import server.data.{HttpData, HttpTlsData}
-import server.streams.StreamProcessor.processStream
 
 import scala.util.chaining.scalaUtilChainingOps
 
-object StreamProcessor:
-  def processStream[F[_]: Sync](data: F[String]): Stream[F, Packets] =
+object RawPacketsProcessor:
+  def process[F[_]: Sync](data: F[String]): Stream[F, Packets] =
     Stream.eval(data).through(processRawData)
 
   private def processRawData[F[_]: Sync: ApplicativeThrow]: Pipe[F, String, Packets] =

@@ -2,8 +2,10 @@ package server
 
 import cats.effect.IO
 import munit.CatsEffectSuite
+import fs2.Stream
 import server.streams.Http
 import Fixtures.*
+import server.*
 
 class HttpStreamSpec extends CatsEffectSuite:
 
@@ -16,9 +18,11 @@ class HttpStreamSpec extends CatsEffectSuite:
   }
 
   test("Http stream failure is propagated") {
-    val failedStream = fs2.Stream.raiseError[IO](
-      new Exception("failure")
+    val failedStream = Stream.raiseError[IO](
+      HttpError("failure")
     ) ++ Http.stream(rawPackets).covary[IO]
 
-    failedStream.attempt.compile.lastOrError.map(_.isLeft).assert
+    val result = failedStream.attempt.compile.lastOrError
+
+    assertIO(result, Left(HttpError("failure")))
   }

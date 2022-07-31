@@ -3,9 +3,6 @@ package server.data
 import cats.effect.kernel.Sync
 import server.data.Data.delayedCmd
 
-import scala.sys.process.*
-import scala.util.chaining.*
-
 object HttpData:
   def rawData[F[_]: Sync]: F[String] =
     delayedCmd(
