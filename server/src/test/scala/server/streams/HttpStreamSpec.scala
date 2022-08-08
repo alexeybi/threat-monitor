@@ -1,11 +1,11 @@
-package server
+package server.streams
 
 import cats.effect.IO
-import munit.CatsEffectSuite
 import fs2.Stream
-import server.streams.Http
-import Fixtures.*
+import munit.CatsEffectSuite
 import server.*
+import server.streams.Fixtures.*
+import server.streams.Http
 
 class HttpStreamSpec extends CatsEffectSuite:
 

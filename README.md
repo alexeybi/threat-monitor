@@ -33,4 +33,4 @@ The requests are checked with [Google web-risk api](https://cloud.google.com/web
 	- [Quotas](https://cloud.google.com/web-risk/quotas)
 
 ---
-Built with [fs2](https://fs2.io/), [http4s](https://http4s.org/), and [cats](https://typelevel.org/cats-effect/)
+Built with [fs2](https://fs2.io/), [http4s](https://http4s.org/), and [cats-effect](https://typelevel.org/cats-effect/)

@@ -1,11 +1,11 @@
-package server
+package server.streams
 
 import cats.effect.IO
 import model.{Packet, Packets}
 import munit.CatsEffectSuite
-import server.streams.{Http, HttpTls}
-import Fixtures.*
 import server.*
+import server.streams.Fixtures.*
+import server.streams.{Http, HttpTls}
 
 class HttpTlsSpec extends CatsEffectSuite:
 
