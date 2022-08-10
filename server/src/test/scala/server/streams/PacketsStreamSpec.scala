@@ -4,7 +4,7 @@ import cats.effect.IO
 import fs2.Stream
 import model.{Packet, Packets}
 import munit.CatsEffectSuite
-import server.streams.Fixtures.*
+import server.Fixtures.*
 import server.streams.Packets
 
 import scala.concurrent.duration.*

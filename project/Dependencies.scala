@@ -19,7 +19,8 @@ object Dependencies {
     "http4s-dsl",
     "http4s-core",
     "http4s-circe",
-    "http4s-ember-client"
+    "http4s-ember-client",
+    "http4s-ember-server"
   ).map("org.http4s" %% _ % http4sVersion)
 
   val googleAuth = Seq(

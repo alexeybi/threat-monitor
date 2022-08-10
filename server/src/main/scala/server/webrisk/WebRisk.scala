@@ -21,7 +21,6 @@ import org.http4s.dsl.io.*
 import org.http4s.ember.client.*
 import org.http4s.headers.*
 import org.http4s.implicits.*
-import server.WebRiskError
 
 import scala.util.chaining.scalaUtilChainingOps
 

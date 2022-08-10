@@ -1,4 +1,4 @@
-package server.streams.webrisk
+package server.processors
 
 import cats.effect.IO
 import cats.effect.kernel.Resource
@@ -19,7 +19,8 @@ import org.http4s.implicits.*
 import org.http4s.{EntityEncoder, HttpApp, HttpRoutes, Request, Response, Status}
 import server.processors.WebRiskProcessor
 import server.processors.WebRiskProcessor.*
-import server.streams.Fixtures.{expectedPackets, validResponse}
+import server.Fixtures.{expectedPackets, validResponse}
+import server.streams.webrisk.MockClient
 import server.webrisk.WebRisk.*
 
 import java.time.Duration

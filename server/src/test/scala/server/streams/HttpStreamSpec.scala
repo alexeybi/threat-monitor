@@ -4,7 +4,7 @@ import cats.effect.IO
 import fs2.Stream
 import munit.CatsEffectSuite
 import server.*
-import server.streams.Fixtures.*
+import Fixtures.*
 import server.streams.Http
 
 class HttpStreamSpec extends CatsEffectSuite:

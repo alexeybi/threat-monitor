@@ -12,7 +12,7 @@ import org.http4s.circe.*
 import org.http4s.client.dsl.io.*
 import org.http4s.implicits.*
 import org.http4s.{EntityEncoder, HttpApp, Request, Response, Status}
-import server.streams.Fixtures.validResponse
+import server.Fixtures.validResponse
 import server.streams.webrisk.MockClient.*
 import server.webrisk.WebRisk.*
 

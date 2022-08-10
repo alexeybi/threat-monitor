@@ -1,4 +1,4 @@
-package server.streams
+package server
 
 import cats.effect.IO
 import model.Packet

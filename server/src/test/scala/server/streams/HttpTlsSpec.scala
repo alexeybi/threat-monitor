@@ -4,7 +4,7 @@ import cats.effect.IO
 import model.{Packet, Packets}
 import munit.CatsEffectSuite
 import server.*
-import server.streams.Fixtures.*
+import Fixtures.*
 import server.streams.{Http, HttpTls}
 
 class HttpTlsSpec extends CatsEffectSuite:
