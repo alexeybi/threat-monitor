@@ -1,9 +1,9 @@
-## Network Malware Monitor
+## Network Threat Monitor
 
-This application allows monitoring network requests in browser in (almost) real time
+This application allows monitoring network requests in browser in near real-time
 showing a threat type for each request.
 
-### Malware analysis
+### Threat analysis
 
 The requests are checked with [Google web-risk api](https://cloud.google.com/web-risk) for several threat types:
 

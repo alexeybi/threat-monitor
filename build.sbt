@@ -3,7 +3,7 @@ import Dependencies._
 ThisBuild / scalaVersion := "3.1.3"
 ThisBuild / version      := "0.1.0"
 
-lazy val malwareMonitor = project
+lazy val threatMonitor= project
   .in(file("."))
   .aggregate(shared.jvm, shared.js, client, server)
   .settings(
