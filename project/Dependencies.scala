@@ -10,9 +10,10 @@ object Dependencies {
     val fs2Version        = "3.2.10"
     val http4sVersion     = "0.23.13"
     val circeVersion      = "0.14.2"
-    val scalajsVersion    = "2.2.0"
     val munitVersion      = "1.0.7"
     val googleAuthVersion = "1.9.0"
+    val laminarVersion    = "0.14.2"
+    val laminextVersion   = "0.14.3"
   }
 
   val http4s = Seq(
@@ -24,8 +25,8 @@ object Dependencies {
   ).map("org.http4s" %% _ % http4sVersion)
 
   val googleAuth = Seq(
-    "google-auth-library-oauth2-http"
-  ).map("com.google.auth" % _ % googleAuthVersion)
+    "com.google.auth" % "google-auth-library-oauth2-http" % googleAuthVersion
+  )
 
   val fs2 = Def.setting(
     Seq(
@@ -43,13 +44,20 @@ object Dependencies {
     ).map("io.circe" %%% _ % circeVersion)
   )
 
-  val scalajs = Def
-    .setting(
-      Seq("scalajs-dom")
-        .map("org.scala-js" %%% _ % scalajsVersion)
-    )
-
   val munit = Def.setting(
-    Seq("munit-cats-effect-3").map("org.typelevel" %%% _ % munitVersion % Test)
+    Seq("org.typelevel" %%% "munit-cats-effect-3" % munitVersion % Test)
+  )
+
+  val laminar = Def.setting(
+    Seq(
+      "com.raquo" %%% "laminar" % laminarVersion
+    )
+  )
+
+  val laminext = Def.setting(
+    Seq(
+      "core",
+      "websocket-circe"
+    ).map("io.laminext" %%% _ % laminextVersion)
   )
 }

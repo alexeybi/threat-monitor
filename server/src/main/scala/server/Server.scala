@@ -32,7 +32,7 @@ object Server:
       wsb: WebSocketBuilder2[F]
   ): Kleisli[F, Request[F], Response[F]] =
     Router(
-      "static" -> resourceServiceBuilder[F]("/static").toRoutes,
+      "static" -> fileService(FileService.Config("static")),
       "/"      -> routes(topic, wsb)
     ).orNotFound
 

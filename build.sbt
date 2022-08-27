@@ -1,15 +1,16 @@
+import org.scalajs.linker.interface.ModuleSplitStyle
 import Dependencies._
 
 ThisBuild / scalaVersion := "3.1.3"
 ThisBuild / version      := "0.1.0"
 
-lazy val threatMonitor= project
+lazy val threatMonitor = project
   .in(file("."))
   .aggregate(shared.jvm, shared.js, client, server)
   .settings(
     (Compile / run) := Def
       .sequential(
-        client / Compile / fastOptJS,
+        client / Compile / fastLinkJS,
         (server / Compile / run).toTask("")
       )
       .value
@@ -32,14 +33,16 @@ lazy val client = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalacOptions ++= compilerOptions,
+    libraryDependencies ++= Seq.concat(laminar.value, laminext.value),
     cleanFiles ++= Seq(
-      (ThisBuild / baseDirectory).value / "static" / "js" / "client.js",
-      (ThisBuild / baseDirectory).value / "static" / "js" / "client.js.map"
+      (ThisBuild / baseDirectory).value / "static" / "js" / "main.js",
+      (ThisBuild / baseDirectory).value / "static" / "js" / "main.js.map"
     ),
-    (Compile / fastOptJS / artifactPath) := (ThisBuild / baseDirectory).value / "static" / "js" / "client.js",
-    (Compile / fullOptJS / artifactPath) := (ThisBuild / baseDirectory).value / "static" / "js" / "client.js",
-    scalaJSUseMainModuleInitializer      := true,
-    libraryDependencies ++= scalajs.value
+    (Compile / fastLinkJS / scalaJSLinkerOutputDirectory) := (ThisBuild / baseDirectory).value / "static" / "js",
+    (Compile / fullLinkJS / scalaJSLinkerOutputDirectory) := (ThisBuild / baseDirectory).value / "static" / "js",
+    scalaJSUseMainModuleInitializer                       := true,
+    scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.ESModule)
+      .withModuleSplitStyle(ModuleSplitStyle.SmallModulesFor(List("threatMonitor"))))
   )
   .dependsOn(shared.js)
 

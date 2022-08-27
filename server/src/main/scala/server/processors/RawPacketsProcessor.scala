@@ -4,7 +4,7 @@ import cats.*
 import cats.effect.kernel.Sync
 import cats.implicits.*
 import cats.syntax.group.catsSyntaxSemigroup
-import fs2.{Pipe, Stream, text}
+import fs2.{text, Pipe, Stream}
 import model.{Packet, Packets, ThreatType}
 
 import scala.util.chaining.scalaUtilChainingOps
