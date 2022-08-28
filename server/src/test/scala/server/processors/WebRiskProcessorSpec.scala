@@ -38,7 +38,7 @@ class WebRiskProcessorSpec extends CatsEffectSuite:
 
   val delayedProcessor: Pipe[IO, Packets, Packets] = WebRiskProcessor
     .process(packet =>
-      IO.sleep(600.millis) >>
+      IO.sleep(500.millis) >>
         runSearchUriRequest(client, validRequest).map(threats =>
           packet.copy(threatTypes = threats)
         )

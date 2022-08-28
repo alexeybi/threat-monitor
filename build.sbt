@@ -23,6 +23,7 @@ lazy val server = project
     libraryDependencies ++= Seq.concat(
       http4s,
       googleAuth,
+      fs2.value,
       munit.value
     )
   )
@@ -33,7 +34,7 @@ lazy val client = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalacOptions ++= compilerOptions,
-    libraryDependencies ++= Seq.concat(laminar.value, laminext.value),
+    libraryDependencies ++= Seq.concat(laminar.value, laminext.value, munit.value),
     cleanFiles ++= Seq(
       (ThisBuild / baseDirectory).value / "static" / "js" / "main.js",
       (ThisBuild / baseDirectory).value / "static" / "js" / "main.js.map"
@@ -50,10 +51,7 @@ lazy val shared = crossProject(JVMPlatform, JSPlatform)
   .in(file("shared"))
   .settings(
     scalacOptions ++= compilerOptions,
-    libraryDependencies ++= Seq.concat(
-      fs2.value,
-      circe.value
-    )
+    libraryDependencies ++= circe.value
   )
 
 lazy val compilerOptions = Seq(
@@ -61,6 +59,5 @@ lazy val compilerOptions = Seq(
   "-unchecked",
   "-deprecation",
   "-feature",
-  "-Xfatal-warnings",
-  "-Ykind-projector:underscores"
+  "-Xfatal-warnings"
 )
