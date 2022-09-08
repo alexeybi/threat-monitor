@@ -1,10 +1,10 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
 import Dependencies._
 
-ThisBuild / scalaVersion := "3.1.3"
+ThisBuild / scalaVersion := Versions.scala3
 ThisBuild / version      := "0.1.0"
 
-lazy val threatMonitor = project
+lazy val monitor = project
   .in(file("."))
   .aggregate(shared.jvm, shared.js, client, server)
   .settings(
@@ -31,19 +31,21 @@ lazy val server = project
 
 lazy val client = project
   .in(file("client"))
-  .enablePlugins(ScalaJSPlugin)
+  .enablePlugins(ScalaJSPlugin, ScalaJSBundlerPlugin)
   .settings(
-    scalacOptions ++= compilerOptions,
-    libraryDependencies ++= Seq.concat(laminar.value, laminext.value, munit.value),
+    jsEnv                                                 := new net.exoego.jsenv.jsdomnodejs.JSDOMNodeJSEnv(),
+    Test / requireJsDomEnv                                := true,
+    scalaJSUseMainModuleInitializer                       := true,
+    (Compile / fastLinkJS / scalaJSLinkerOutputDirectory) := (ThisBuild / baseDirectory).value / "static" / "js",
+    (Compile / fullLinkJS / scalaJSLinkerOutputDirectory) := (ThisBuild / baseDirectory).value / "static" / "js",
+    scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)
+      .withModuleSplitStyle(ModuleSplitStyle.SmallModulesFor(List("monitor")))),
     cleanFiles ++= Seq(
       (ThisBuild / baseDirectory).value / "static" / "js" / "main.js",
       (ThisBuild / baseDirectory).value / "static" / "js" / "main.js.map"
     ),
-    (Compile / fastLinkJS / scalaJSLinkerOutputDirectory) := (ThisBuild / baseDirectory).value / "static" / "js",
-    (Compile / fullLinkJS / scalaJSLinkerOutputDirectory) := (ThisBuild / baseDirectory).value / "static" / "js",
-    scalaJSUseMainModuleInitializer                       := true,
-    scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.ESModule)
-      .withModuleSplitStyle(ModuleSplitStyle.SmallModulesFor(List("threatMonitor"))))
+    libraryDependencies ++= Seq.concat(laminar.value, laminext.value, domtestutils.value),
+    scalacOptions ++= compilerOptions
   )
   .dependsOn(shared.js)
 

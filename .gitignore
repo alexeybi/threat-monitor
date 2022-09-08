@@ -20,5 +20,8 @@ metals.sbt
 client.js
 client.js.map
 
-vite
+vite/
+node_modules/
+package-lock.json
+package.json
 

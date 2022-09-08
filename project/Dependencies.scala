@@ -7,6 +7,7 @@ import scala.language.postfixOps
 object Dependencies {
 
   object Versions {
+    val scala3            = "3.1.3"
     val fs2Version        = "3.2.10"
     val http4sVersion     = "0.23.13"
     val circeVersion      = "0.14.2"
@@ -59,5 +60,11 @@ object Dependencies {
       "core",
       "websocket-circe"
     ).map("io.laminext" %%% _ % laminextVersion)
+  )
+
+  val domtestutils = Def.setting(
+    Seq(
+      "com.raquo" %%% "domtestutils" % "0.15.1" % Test
+    )
   )
 }

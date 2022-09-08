@@ -6,7 +6,6 @@ import NavBar.*
 import client.StatusIndicator.status
 import client.tables.PacketsTable.packets
 import client.tables.ThreatsTable.threats
-import model.{MALWARE, Packet, SOCIAL_ENGINEERING, UNWANTED_SOFTWARE}
 import org.scalajs.dom
 
 @main def run =
