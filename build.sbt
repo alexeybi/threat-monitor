@@ -1,4 +1,5 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
+import NativePackagerHelper._
 import Dependencies._
 
 ThisBuild / scalaVersion := Versions.scala3
@@ -18,6 +19,7 @@ lazy val monitor = project
 
 lazy val server = project
   .in(file("server"))
+  .enablePlugins(JavaAppPackaging)
   .settings(
     scalacOptions ++= compilerOptions,
     libraryDependencies ++= Seq.concat(
@@ -63,3 +65,15 @@ lazy val compilerOptions = Seq(
   "-feature",
   "-Xfatal-warnings"
 )
+
+enablePlugins(UniversalPlugin)
+
+Universal / mappings := {
+  val staged      = (server / Compile / stage).value
+  val stagedFiles = (staged ** AllPassFilter) pair relativeTo(staged)
+  val staticFiles =
+    directory((ThisBuild / baseDirectory).value / "static").map { case (file, name) =>
+      (file, "bin/" + name)
+    }
+  stagedFiles ++ staticFiles
+}
