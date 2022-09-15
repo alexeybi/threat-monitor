@@ -2,7 +2,7 @@ package server
 
 import cats.effect.{ExitCode, IO, IOApp}
 import fs2.Stream
-import fs2.concurrent.Topic
+import fs2.concurrent.{SignallingRef, Topic}
 import model.{Packet, Packets}
 import server.Server.*
 import server.data.{HttpData, HttpTlsData}
@@ -15,6 +15,7 @@ import scala.concurrent.duration.*
 object Main extends IOApp:
   def run(args: List[String]): IO[ExitCode] =
     for
+      shutdown        <- SignallingRef[IO, Boolean](false)
       topic           <- Topic[IO, Packets]
       config          <- WebRisk.credentials[IO]
       client           = WebRisk.client[IO]
@@ -23,14 +24,20 @@ object Main extends IOApp:
                            .stream[IO](5.seconds)(
                              HttpData.rawData,
                              HttpTlsData.rawData
-                           )
+                           )(shutdown)
                            .through(webRiskProcessor.process)
                            .through(topic.publish)
                            .compile
                            .drain
                            .start
-      _               <- serverBuilder[IO]
-                           .withHttpWebSocketApp(httpApp(topic))
-                           .build
-                           .use(_ => IO.never)
+      _               <- Stream
+                           .eval(
+                             serverBuilder[IO]
+                               .withHttpWebSocketApp(httpApp(topic))
+                               .build
+                               .useForever
+                           )
+                           .interruptWhen(shutdown)
+                           .compile
+                           .drain
     yield ExitCode.Success
