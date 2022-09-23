@@ -4,10 +4,10 @@ import cats.effect.kernel.Sync
 import server.data.Data.delayedCmd
 
 object HttpData:
-  def rawData[F[_]: Sync]: F[String] =
+  def rawData[F[_]: Sync](interface: String): F[String] =
     delayedCmd(
       "tshark"                                                    +
-        " -l -i en0"                                                    +
+        s" -l -i $interface"                                                    +
         " -t a"                                                         +
         " -T fields -e http.host -e ip.dst -e ipv6.dst -e _ws.col.Time" +
         " -f 'tcp port 80'"                                             +

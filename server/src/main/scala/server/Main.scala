@@ -5,6 +5,7 @@ import fs2.Stream
 import fs2.concurrent.{SignallingRef, Topic}
 import model.{Packet, Packets}
 import server.Server.*
+import server.data.Data.interface
 import server.data.{HttpData, HttpTlsData}
 import server.processors.{RawPacketsProcessor, WebRiskProcessor}
 import server.streams.Packets
@@ -18,12 +19,13 @@ object Main extends IOApp:
       shutdown        <- SignallingRef[IO, Boolean](false)
       topic           <- Topic[IO, Packets]
       config          <- WebRisk.credentials[IO]
+      interface       <- interface[IO]
       client           = WebRisk.client[IO]
       webRiskProcessor = WebRiskProcessor(config, client)
       _               <- Packets
                            .stream[IO](5.seconds)(
-                             HttpData.rawData,
-                             HttpTlsData.rawData
+                             HttpData.rawData(interface),
+                             HttpTlsData.rawData(interface)
                            )(shutdown)
                            .through(webRiskProcessor.process)
                            .through(topic.publish)

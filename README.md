@@ -1,6 +1,6 @@
 ## Network Threat Monitor
 
-This application allows monitoring network requests in browser in near real-time
+This application allows monitoring outgoing requests over a wireless network in browser in near real-time
 showing a threat type for each request.
 
 ### Threat analysis
@@ -13,7 +13,7 @@ The requests are checked with [Google web-risk api](https://cloud.google.com/web
 
 ### Requirements
 
-* [tshark](https://tshark.dev/) has to be locally installed and given permissions to run without requiring password (e.g. by adding a rule to sudoers): 
+*  `sudo tshark` is used for traffic capture, hence [tshark](https://tshark.dev/) has to be locally installed and given permission to run without requiring a password (e.g. by adding a rule to sudoers):
 ```
 # /etc/sudoers.d/tshark-no-pass
 %admin ALL=(ALL) NOPASSWD: <path-to-tshark-bin>
@@ -56,7 +56,8 @@ See [Universal Packager](https://sbt-native-packager.readthedocs.io/en/latest/fo
 * To run only server or client tests: `sbt server/test`, or `sbt client/test`
 
 ### Additional resources
-[PhishTank](https://phishtank.org/phish_search.php?valid=y&active=All&Search=Search) lists verified phishing urls which can be used to check threat monitoring.
+[PhishTank](https://phishtank.org/phish_search.php?valid=y&active=All&Search=Search) lists verified phishing urls
+which can be used to check threat monitoring.
 Note that `WebRisk` might still consider some verified phishing urls as harmless.
 
 ### :exclamation: Important note on pricing and quotas :exclamation:
