@@ -74,14 +74,19 @@ object WebRisk:
   ): F[Vector[ThreatType]] =
     client.use(
       _.run(request).use(
-        _.as[Json].map { json =>
-          if json.asObject.forall(_.isEmpty) then Vector.empty
+        _.as[Json].flatMap { json =>
+          if json.asObject.forall(_.isEmpty) then Async[F].delay(Vector.empty)
           else
             json.hcursor
               .downField("threat")
               .downField("threatTypes")
               .as[Vector[ThreatType]]
-              .getOrElse(Vector.empty)
+              .fold(
+                failure =>
+                  Async[F]
+                    .raiseError(failure.withMessage("Couldn't decode WebRisk response")),
+                Async[F].delay
+              )
         }
       )
     )

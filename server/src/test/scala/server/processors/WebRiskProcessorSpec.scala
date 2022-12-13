@@ -3,9 +3,10 @@ package server.processors
 import cats.effect.IO
 import cats.effect.kernel.Resource
 import cats.implicits.catsSyntaxApplicativeId
+import fs2.concurrent.SignallingRef
 import fs2.{Pipe, Stream}
 import io.circe.Json
-import model.{MALWARE, Packets, SOCIAL_ENGINEERING, UNWANTED_SOFTWARE}
+import model.{MALWARE, Packet, Packets, SOCIAL_ENGINEERING, UNWANTED_SOFTWARE}
 import munit.CatsEffectSuite
 import org.http4s.Method.GET
 import org.http4s.Status.Ok
@@ -22,6 +23,7 @@ import server.processors.WebRiskProcessor.*
 import server.Fixtures.{expectedPackets, validResponse}
 import server.streams.webrisk.MockClient
 import server.webrisk.WebRisk.*
+import server.*
 
 import java.time.Duration
 import java.util.{Calendar, Date}
@@ -44,6 +46,10 @@ class WebRiskProcessorSpec extends CatsEffectSuite:
         )
     )
 
+  val failedProcessor  : Pipe[IO, Packets, Packets] = WebRiskProcessor.process(_ =>
+    runSearchUriRequest(client, validRequest) >> IO.raiseError(WebRiskError("failure"))
+  )
+
   test("WebRisk processor runs concurrently") {
     val result = Stream
       .eval(IO.delay(expectedPackets.take(2)))
@@ -57,4 +63,13 @@ class WebRiskProcessorSpec extends CatsEffectSuite:
         .take(2)
         .map(_.copy(threatTypes = Vector(SOCIAL_ENGINEERING, MALWARE, UNWANTED_SOFTWARE)))
     )
+  }
+
+  test("Error is propagated") {
+    val result = Stream.eval(IO.delay(expectedPackets.take(2)))
+      .through(failedProcessor)
+      .compile
+      .lastOrError
+
+    interceptMessageIO[WebRiskError]("failure")(result)
   }

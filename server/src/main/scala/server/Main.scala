@@ -21,7 +21,7 @@ object Main extends IOApp:
       config          <- WebRisk.credentials[IO]
       interface       <- interface[IO]
       client           = WebRisk.client[IO]
-      webRiskProcessor = WebRiskProcessor(config, client)
+      webRiskProcessor = WebRiskProcessor(config, client, shutdown)
       _               <- Packets
                            .stream[IO](5.seconds)(
                              HttpData.rawData(interface),
@@ -29,6 +29,7 @@ object Main extends IOApp:
                            )(shutdown)
                            .through(webRiskProcessor.process)
                            .through(topic.publish)
+                           .interruptWhen(shutdown)
                            .compile
                            .drain
                            .start

@@ -1,3 +1,5 @@
+server/bench
+
 target/
 logs/
 js
